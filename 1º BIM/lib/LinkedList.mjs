@@ -1,48 +1,203 @@
-class Node{
-    constructor(val){
-        this.data = val 
-        this.next = null
-    }
+class Node {
+  constructor(val) {
+    this.data = val;
+    this.next = null;
+  }
 }
 
-export default class LinkedList{
-    #head // início da lista (cabeça)
-    #tail // final da lista (cauda)
-    #count; // quantidade de nodos da lista 
+export default class LinkedList {
+  #head; // Início da lista (cabeça)
+  #tail; // Final da lista (cauda)
+  #count; // Quantidade de nodos da lista
 
-    constructor() {
-        this.#head = null;
+  constructor() {
+    this.#head = null;
+    this.#tail = null;
+    this.#count = 0;
+  }
+
+  //getter que retorna se a lista encadeada está vazia ou não
+  get isEmpty() {
+    return this.#count === 0;
+  }
+
+  //getter que retorna a quantidade de elementos da lista
+  get count() {
+    return this.#count;
+  }
+
+  //Método para inserir em qualquer posição
+  insert(pos, val) {
+    //cria o nodo para armazenar o valor pretendido
+    const inserted = new Node(val);
+
+    //1º caso: a lista está vazia
+    if (this.isEmpty) {
+      this.#head = inserted;
+      this.#tail = inserted;
+    }
+
+    //2º caso: inserção na primeira posição
+    else if (pos === 0) {
+      inserted.next = this.#head;
+      this.#head = inserted;
+    }
+
+    //3º caso: inserç]ao no final da lista
+    else if (pos >= this.#count) {
+      this.#tail.next = inserted;
+      this.#tail = inserted;
+    }
+
+    //4º caso: posição intermediária
+    else {
+      let before = this.#head;
+      for (let i = 1; i < pos; i++) {
+        before = before.next;
+      }
+      let after = before.next;
+      inserted.next = after;
+      before.next = inserted;
+    }
+
+    this.#count++;
+  }
+
+  //método para inserção na primeira posição (atalho)
+  insertHead(val) {
+    this.insert(0, val);
+  }
+
+  //método para inserção na última posição (atalho)
+  insertTail(val) {
+    this.insert(this.#count, val);
+  }
+
+  //método para remoção de um nodo na lista
+  remove(pos) {
+    //1º caso: a lista está vazia ou a posição informada está fora dos limites da lista
+    if (this.isEmpty || pos < 0 || pos > this.#count - 1) {
+      return undefined;
+    }
+
+    let removed;
+
+    //2º caso: remoção do início da lista
+    if (pos === 0) {
+      removed = this.#head;
+
+      this.#head = this.#head.next;
+
+      if (this.#count === 1) {
         this.#tail = null;
-        this.#count = 0;
+      }
     }
 
-// getter que retorna se a lista encadeada está vazia ou não 
+    //3º caso: remoção de nodo intermediário ou final
+    else {
+      let before = this.#head;
 
-    get isEmpty(){
-        return this.#count === 0;
+      for (let i = 1; i < pos; i++) {
+        before = before.next;
+      }
+      removed = before.next;
+      let after = removed.next;
+
+      before.next = after;
+      if (pos === this.#count - 1) {
+        this.#tail = before;
+      }
+    }
+    this.#count--;
+    return removed.data;
+  }
+
+  removeHead() {
+    return this.remove(0);
+  }
+
+  removeTail() {
+    return this.remove(this.#count - 1);
+  }
+
+  indexOf(val) {
+    //1º caso: lista vazia
+    if (this.isEmpty) {
+      return -1;
     }
 
+    let node = this.#head;
 
-// getter que retorna a quantidade de elementos da lista 
+    for (let i = 0; i < this.#count; i++) {
+      if (node.data === val) {
+        return i;
+      }
+      node = node.next;
+    }
+    return -1;
+  }
 
-    get count(){
-        return this.#count
+  //método que retorna (sem remover) um nodo da lista, de acordo com a sua posição
+  peek(pos) {
+    //1º caso: lista vazia ou posição fora dos limetes
+    if (this.isEmpty || pos < 0 || pos > this.#count - 1) {
+      return undefined;
     }
 
-// Método para inserir em qualquer posição, sempre que chamar o insert tem que passar a posição e valor 
-    insert(pos, val){
-        //cria o nodo para armazenar o valor pretendido
-        const inserted = new Node(val) //objeto nó 
+    //2º caso: busca sequencial
+    let node = this.#head;
 
-        //1º caso a lista está vazia 
-        if(this.isEmpty){
-            this.#head = inserted 
-            this.#tail = inserted 
-        }
-
-        this.#count++
+    for (let i = 0; i < pos; i++) {
+      node = node.next;
     }
+
+    return node.data;
+  }
+
+  //método para retornar (sem remover) o valor do primeiro nodo da lista(atalho)
+  peekHead() {
+    return this.peek(0)
+  }
+  
+  //método para retornar (sem remover) o valor do último nodo da lista(atalho)
+  peekTail() {
+    return this.peek(this.#count - 1)
+  }
+
+  //método para exibição da lista encadeada
+  print(){
+    let output = '( '
+    let node = this.#head
+    for (let i = 0; i < this.#count; i++){
+      if(output !== '( ' ) {
+        output += ', '
+      }
+      output += `[${i}]: ${node.data}`
+      node = node.next
+    }
+    output += ` ), count: ${this.#count}`
+    return output
+  } 
+
+
 }
 
+//menos -1 é um valor padrão de toda busca quando não encontra o que queremo
 
+// 1 == 1 sim
+// 1 == 
 // lista encadeada é utilizada em situações onde precisa manipular diversas informações: inserção de dados, apagar dados e quer tornar o sistema eficiente, pois utiliza menos processamento e memória.
+/* lista{
+    data: +
+    next:{
+        data:5
+        next{
+            data: 2
+            next: null
+        }
+    }
+}*/ 
+
+//lista encadeada simples, onde temos apenas um valor apontando para o próximo valor 
+// (head apontando para o tail e o tail aponta para null)
+// só percorre pelo head
