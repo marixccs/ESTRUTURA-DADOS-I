@@ -1,4 +1,4 @@
-import LinkedList from "./1º BIM/lib/LinkedList.mjs";
+import LinkedList from "./lib/LinkedList.mjs";
 
 const lista = new LinkedList()
 
