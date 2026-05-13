@@ -45,7 +45,7 @@ function mover(origem, destino, nomeOrigem, nomeDestino) {
     let disco = origem.pop()
 
     // validação: não pode colocar disco maior sobre menor
-    if (!destino.isEmpty && disco < destino.peek()) {
+    if (!destino.isEmpty && disco > destino.peek()) {
         origem.push(disco)
         throw new Error(
             `Movimento inválido: disco ${disco} não pode ficar sobre disco ${destino.peek()}`

@@ -26,7 +26,7 @@ export default class Queue{
    }
 
    get isEmpty(){
-        return this.#data.length === 0 
+        return this.#data.length === 0 ? "Sim, está vazia" : "Não está vazia"
    }
 
    //método para imprimir a fila (efeitos de depuração)

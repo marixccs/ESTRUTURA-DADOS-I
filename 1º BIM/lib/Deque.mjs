@@ -9,6 +9,7 @@ export default class Deque {
   insertFront(val) {
     this.#data.unshift(val);
   }
+  
 
   //método para inserir dados no final da estrutura
   insertBack(val) {
